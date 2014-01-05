@@ -2,6 +2,7 @@
 ==================
 
 编程的一百个大作业
+
 目录
 ==
 
@@ -35,7 +36,10 @@
  13. Credit Card Validator – Takes in a credit card number from a common credit card vendor (Visa, MasterCard, American Express, Discoverer) and validates it to make sure that it is a valid number (look into how credit cards use a checksum).
  14. Tax Calculator – Asks the user to enter a cost and either a country or state tax. It then returns the tax plus the total cost with tax.
  15. Dijkstra’s Algorithm – Create a program that finds the shortest path through a graph using its edges.
+
 文字
+--
+
  16. Reverse a String – Enter a string and the program will reverse it and print it out.
  17. Pig Latin – Pig Latin is a game of alterations played on the English language game. To create the Pig Latin form of an English word the initial consonant sound is transposed to the end of the word and an ay is affixed (Ex.: "banana" would yield anana-bay). Read Wikipedia for more information on rules.
  18. Count Vowels – Enter a string and the program counts the number of vowels in the text. For added complexity have it report a sum of each vowel found.
@@ -53,7 +57,10 @@
  30. Text to HTML Generator – Converts text files into web HTML files and stylizes them. Great for making online documentation of standard text documentation.
  31. CD Key Generator – Generates a unique key for your applications to use based on some arbitrary algorithm that you can specify. Great for software developers looking to make shareware that can be activated.
  32. Regex Query Tool – A tool that allows the user to enter a text string and then in a separate control enter a regex pattern. It will run the regular expression against the source text and return any matches or flag errors in the regular expression.
+
 网络
+--
+
  33. FTP Program – A file transfer program which can transfer files back and forth from a remote web sever.
  34. Get Atomic Time from Internet Clock – This program will get the true atomic time from an atomic time clock on the Internet. There are various clocks across the world. Do a search for a list of them.
  35. Chat Application (IRC or MSN Style) – Create a chat application that can create simple chat rooms like on Internet Relay Chat (IRC) or a more direct chatting style like MSN. For added complexity, create your own protocol to facilitate this chatting.
@@ -69,7 +76,10 @@
  45. Site Checker with Time Scheduling – An application that attempts to connect to a website or server every so many minutes or a given time and check if it is up. If it is down, it will notify you by email or by posting a notice on screen.
  46. Small Web Server – A simple web server that can serve HTML files that contain Javascript and other forms of non-code executing code. Added complexity would be to try and implement streaming video, create a server-side language, or serve up other stream types.
  47. Web Bot – An automated program which carries out tasks on the web including checking websites, page scraping, and summarization of data or web posting.
+
 类型抽象
+----
+
  48. Product Inventory Project – Create an application which manages an inventory of products. Create a product class which has a price, id, and quantity on hand. Then create an inventory class which keeps track of various products and can sum up the inventory value.
  49. Movie Store – Manage video rentals and controls when videos are checked out, due to return, overdue fees and for added complexity create a summary of those accounts which are overdue for contact.
  50. Airline / Hotel Reservation System – Create a reservation system which books airline seats or hotel rooms. It charges various rates for particular sections of the plane or hotel. Example, first class is going to cost more than coach. Hotel rooms have penthouse suites which cost more. Keep track of when rooms will be available and can be scheduled.
@@ -87,12 +97,18 @@
  62. Vending Machine – Create an application which takes money and dispenses various types of candy or other item. The user enters a number and letter sequence, like D9, and have it return an instance of “Item” which of the proper type. Example when they press D9 it will return a type of candy bar which is an instance of Mr. GoodBar.
  63. Josephus Problem – Create a program which links together various node objects and then every Nth object is removed until you have one object left. This last object is the sole survivor. Look it up on Google under “Josephus Algorithm”
  64. Family Tree Creator – Create a class called “Person” which will have a name, when they were born and when (and if) they died. Allow the user to create these Person classes and put them into a family tree structure. Print out the tree to the screen.
+
 并发
+--
+
  65. Create A Progress Bar for Downloads – Create a progress bar for applications that can keep track of a download in progress. The progress bar will be on a separate thread and will communicate with the main thread using delegates.
  66. Download Manager – Allow your program to download various files and each one is downloading in the background on a separate thread. The main thread will keep track of the other thread’s progress and notify the user when downloads are completed.
  67. Chat Application (remoting style) – Create a chat application which allows you to connect directly to another computer by their IP through the use of remoting and allow your “server” application handle multiple incoming connections.
  68. Bulk Thumbnail Creator – Picture processing can take a bit of time for some transformations. Especially if the image is large. Create an image program which can take hundreds of images and converts them to a specified size in the background thread while you do other things. For added complexity, have one thread handling re-sizing, have another bulk renaming of thumbnails etc.
+
 网页
+--
+
  69. WYSIWG (What you see is what you get) Editor – Create an editor online which allows people to move around elements, create tables, write text, set colors etc for web pages without having to know HTML. Think Dreamweaver or FrontPage but for online sites. If you need an example check out the DIC page used to create a post.
  70. Web Browser with Tabs – Create a small web browser that allows you to navigate the web and contains tabs which can be used to navigate to multiple web pages at once. For simplicity don’t worry about executing Javascript or other client side code.
  71. Page Scraper – Create an application which connects to a site and pulls out all links, or images, and saves them to a list. For added complexity, organize the indexed content and don’t allow duplicates. Have it put the results into an easily searchable index file.
@@ -109,7 +125,10 @@
  82. Content Management System – Create a content management system (CMS) like Joomla, Drupal, PHP Nuke etc. Start small and allow for the addition of modules/addons later.
  83. Template Maker – Make a site or application which allows the user to enter in various color codes, elements, dimensions and constructs a template file for a particular application like PHPBB, Invision Board, MySpace, Bebo, etc.
  84. CAPTCHA Maker – Ever see those images with letters a numbers when you signup for a service and then asks you to enter what you see? It keeps web bots from automatically signing up and spamming. Try creating one yourself for online forms. If you use PHP, take a look at the image functions of GD.
+
 文件
+--
+
  85. Quiz Maker – Make an application which takes various questions form a file, picked randomly, and puts together a quiz for students. Each quiz can be different and then reads a key to grade the quizzes.
  86. Quick Launcher – A utility program that allows the user to assign various programs to icons on a toolbar. Then by clicking the buttons they can quickly launch the programs with parameters etc. Much like Windows quick launch.
  87. File Explorer – Create your own file explorer program, with added features, better searching, new icons and other views.
@@ -126,7 +145,10 @@
  98. File Copy Utility – Create a utility that can do bulk file copying and backups of other files.
  99. Code Snippet Manager – Another utility program that allows coders to put in functions, classes or other tidbits to save for use later. Organized by the type of snippet or language the coder can quickly look up code. For extra practice try adding syntax highlighting based on the language.
  100. Versioning Manager – Create your own versioning system for code files. Users are forced to check out items and lock items during reading and writing so that a group of programmers are not accidentally overwriting code files on one another.
+
 数据库
+---
+
  101. SQL Query Analyzer – A utility application which a user can enter a query and have it run against a local database and look for ways to make it more efficient.
  102. Remote SQL Tool – A utility that can execute queries on remote servers from your local computer across the Internet. It should take in a remote host, user name and password, run the query and return the results.
  103. Baseball / Other Card Collector – Create an online application for keeping track of a collection of cards. Let the user enter all cards in a set, check off which ones they have, which ones they need and generate lists of cards they are looking for. For extra complexity, have it sum up sets and generate reports on how close they are of completing sets or the current value of a set.
@@ -140,7 +162,10 @@
  111. Entity Relationship Diagram (ERD) Creator – A program that allows the user to put together ERD diagram and save it or have it generate some basic SQL syntax to give them a jump start.
  112. Database Translation (MySQL SQL Server) – A simple utility that reads in from one database and constructs SQL compliant with another database. Then saves that to another database. One popular transition would be to and from MySQL server for databases like SQL Server and Oracle.
  113. Web Board (Forum) – Create a forum for you and your buddies to post, administer and share thoughts and ideas.
+
 图形与媒体
+-----
+
  114. Slide Show – Make an application that shows various pictures in a slide show format. For extra complexity try adding various effects like fade in/out, star wipe and window blinds transitions.
  115. Mind Mapper – Allow the user to put down ideas and quickly brainstorm how they are related into a mind map. The goal here is speed so let the user quickly write in an idea and drag it around in a visual map to show relationships.
  116. Import Picture and Save as Grayscale – A utility that sucks the color right out of an image and saves it. You could add more including adjusting contrast, colorizing and more for added complexity.
@@ -158,5 +183,6 @@
  128. Screen Saver – Make a screensaver program that will run while your computer sits idle. To make a simple one use some standard pictures and then for added complexity try a 3D object that spins around the screen and bounces off the sides.
  129. Watermarking Application – Have some pictures you want copyright protected? Add your own logo or text lightly across the background so that no one can simply steal your graphics off your site. Make a program that will add this watermark to the picture.
  130. Turtle Graphics – This is a common project where you create a floor of 20 x 20 squares. Using various commands you tell a turtle to draw a line on the floor. You have move forward, left or right, lift or drop pen etc. For added complexity, allow the program to read in the list of commands from a file. Do a search online for “Turtle Graphics” for more information.
+
 
 
