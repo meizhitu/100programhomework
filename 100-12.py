@@ -10,7 +10,7 @@ def rad(d):
     return d * math.pi / 180.0
 
 
-def distance(lat1, lng1, lat2, lng2):
+def distanceLatLng(lat1, lng1, lat2, lng2):
     radlat1 = rad(lat1)
     radlat2 = rad(lat2)
     a = radlat1 - radlat2
@@ -34,16 +34,17 @@ def getCityLoc(city):
     response.close()
     location = data['results'][0]['geometry']['location']
     print location
+    return location
 
 
 def distance(city1, city2):
     loc1 = getCityLoc(city1)
-    time.sleep(3000)
+    time.sleep(3)
     loc2 = getCityLoc(city2)
-    return distance(loc1['lat'], loc1['lng'], loc2['lat'], loc2['lng'])
+    return distanceLatLng(loc1['lat'], loc1['lng'], loc2['lat'], loc2['lng'])
 
 
 if __name__ == "__main__":
     city1 = raw_input(">城市1：")
     city2 = raw_input(">城市2：")
-    print(distance(city1, city2))
+    print("距离：{0}".format(distance(city1, city2)))
