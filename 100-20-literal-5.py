@@ -2,6 +2,7 @@ __author__ = 'rui'
 #coding=utf-8
 
 import sys
+import codecs
 import re
 import pygtk
 from collections import Counter
@@ -10,7 +11,7 @@ pygtk.require("2.0")
 import gtk
 import gtk.glade
 
-maxWordLen = 5
+maxWordLen = 2
 
 
 def countWord(s):
@@ -25,37 +26,44 @@ def countWord(s):
     return prettyPrint(dict, True)
 
 
-def splitWord(w):
-    sw = {}
+def splitWord(w, allwords):
     for i in range(len(w)):
-        for j in range(maxWordLen):
-            if (i + j) < len(w):
-                if w[i:i + j] in sw:
-                    sw[w[i:i + j]] += 1
-                else:
-                    sw[w[i:i + j]] = 1
-    return sw
+        if (i + maxWordLen) <= len(w):
+            if w[i:i + maxWordLen] in allwords:
+                allwords[w[i:i + maxWordLen]] += 1
+            else:
+                allwords[w[i:i + maxWordLen]] = 1
+    return allwords
 
 
 def countFile():
-    result = ""
+    from time import clock
+
+    start = clock()
     words = []
-    with open("res/songci.txt", 'r') as f:
+    allwords = {}
+    with codecs.open("res/songci.txt", 'r', 'utf-8') as f:
         for line in f:
-            if len(line) > 10 and len(line) < 100:
-                word = re.split('[,!?.]', line)
-                words.append(word)
+            if len(line) > 10 and len(line) < 500:
+                word = re.split(u'[,!?.，！？。]', line)
+                words.extend(word)
     words = filter(lambda x: len(x) > 0, words)
-    allwords = Counter()
-    for word in words:
-        allwords += Counter((apply(splitWord, word)))
-    maxCount = 100
+    #prettyPrintArray(words)
+    for wd in words:
+        splitWord(wd, allwords)
+    maxCount = 30
+    result = ""
     for key, valve in sorted(allwords.iteritems(), key=lambda e: e[1], reverse=True):
         if (maxCount > 0):
             maxCount -= 1
             result += key + ":" + str(valve) + "\n"
     print(result)
     return result
+
+
+def prettyPrintArray(arr):
+    for k in arr:
+        print(k)
 
 
 def prettyPrint(wcDict, sort=False):
