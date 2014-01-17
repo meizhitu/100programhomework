@@ -34,23 +34,25 @@ class Converter:
     """
     温度转换
     """
+
     def __init__(self):
-        for k,v in enumerate(self.convertMap):
-            for m,n in enumerate(v[1]):
-                self.unitMap[n[1]]=[n[0],n[2]]
-                self.unitMap[n[2]] =[1/n[0],n[1]]
+        for k, v in enumerate(self.convertMap):
+            for m, n in enumerate(v[1]):
+                self.unitMap[n[1]] = [n[0], n[2]]
+                self.unitMap[n[2]] = [1 / n[0], n[1]]
+
     def C2F(self, c):
         return (c * 9 / 5) + 32
 
     def F2C(self, f):
         return (f - 32) * 5 / 9
 
-    def A2B(self, a,v):
-        return self.unitMap[a][0]*v
+    def A2B(self, a, v):
+        return self.unitMap[a][0] * v
 
 
 if __name__ == "__main__":
     converter = Converter()
-    print(converter.A2B("英尺",123))
-    print(converter.A2B("公里",345))
+    print(converter.A2B("英尺", 123))
+    print(converter.A2B("公里", 345))
     pass

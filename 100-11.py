@@ -4,7 +4,6 @@ __author__ = 'rui'
 import time
 import os
 import threading
-import sys
 import traceback
 import pygame
 
@@ -51,6 +50,7 @@ def playMusic():
             if event.type == pygame.QUIT:
                 pygame.mixer.music.stop()
                 return
+
 
 def printTraceback():
     try:

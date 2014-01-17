@@ -27,7 +27,8 @@ class CreditCard:
                 checkSum += (val % 10)
                 val /= 10
         return (checkSum % 10) == 0
-    def getCardType(self,cardNo):
+
+    def getCardType(self, cardNo):
         cardNo = "".join(cardNo.split())
         for k in (self.cardMap):
             if (len(cardNo) == k[1] and re.match(k[0], cardNo)):

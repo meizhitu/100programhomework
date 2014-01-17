@@ -4,8 +4,10 @@ __author__ = 'rui'
 '''A Calculator Implemented With A Top-Down, Recursive-Descent Parser'''
 # Author: Erez Shinan, Dec 2012
 
-import re, collections
+import re
+import collections
 from operator import add, sub, mul, div
+
 
 Token = collections.namedtuple('Token', ['name', 'value'])
 RuleMatch = collections.namedtuple('RuleMatch', ['name', 'matched'])

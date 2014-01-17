@@ -3,12 +3,10 @@ __author__ = 'rui'
 
 #计算个人所得税及年终奖
 #学习一下gtk
-import sys
 import pygtk
 
 pygtk.require("2.0")
 import gtk
-import gtk.glade
 
 #个人部分
 insuranceMax = 15669;#社保封顶数

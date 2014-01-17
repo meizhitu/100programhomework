@@ -4,12 +4,21 @@ __author__ = 'rui'
 def reverseString(s):
     return s[::-1]
 
+
 def reverseString2(s):
     slen = len(s)
-    if slen<=1:
+    if slen <= 1:
         return s
-    return reverseString2(s[1:])+s[0]
+    return reverseString2(s[1:]) + s[0]
+
+
+def reverseString3(s):
+    slen = len(s)
+    if slen <= 1:
+        return s
+    return s[-1] + reverseString3(s[1:-1]) + s[0]
+
 
 if __name__ == "__main__":
     print reverseString("hello world")
-    print reverseString2(u"精灵入世，双鹤齐飞。 孤亭独立，单鹤静候。 独凿山石，枝叶单飞。 炭黑如墨，苔似牙月。")
+    print reverseString3(u"精灵入世，双鹤齐飞。 孤亭独立，单鹤静候。 独凿山石，枝叶单飞。 炭黑如墨，苔似牙月。")

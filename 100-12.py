@@ -6,6 +6,7 @@ import json
 import math
 import time
 
+
 def rad(d):
     return d * math.pi / 180.0
 

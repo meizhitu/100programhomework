@@ -1,15 +1,12 @@
 __author__ = 'rui'
 #coding=utf-8
 
-import sys
 import codecs
 import re
 import pygtk
-from collections import Counter
 
 pygtk.require("2.0")
 import gtk
-import gtk.glade
 
 maxWordLen = 2
 

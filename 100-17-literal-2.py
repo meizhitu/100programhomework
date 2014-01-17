@@ -8,7 +8,9 @@ __author__ = 'rui'
 (3). 如果英文单词以‘q’字母开始，并且后面有个字母‘u’，将“qu”移动到单词末尾加入“ay”后得到“Pig Latin”对应单词。例如，“quiet”变为“ietquay”，“quay”变为“ayquay”。
 (4). 如果英文单词以辅音字母开始，所有连续的辅音字母一起移动到单词末尾加入“ay”后得到“Pig Latin”对应单词。例如，“tomato”变为“omatotay”， “school” 变为“oolschay”，“you” 变为“ouyay”，“my” 变为“ymay ”，“ssssh” 变为“sssshay”。
 """
-vowels = ("a", "e", "i", "o", "u", "A", "E", "I", "O", "U","y","Y")
+vowels = ("a", "e", "i", "o", "u", "A", "E", "I", "O", "U", "y", "Y")
+
+
 def getVowelPosition(word):
     if word.startswith("qu"):
         return 2
@@ -19,18 +21,20 @@ def getVowelPosition(word):
             return i
     return -1
 
+
 def pigLatinConverter(sentence):
     words = sentence.split()
     new_words = []
     for word in words:
         pos = getVowelPosition(word)
         if (pos == 0):
-            new_words.append(word+"hay")
-        elif(pos > 0):
-            new_words.append(word[pos:]+word[:pos]+"ay")
+            new_words.append(word + "hay")
+        elif (pos > 0):
+            new_words.append(word[pos:] + word[:pos] + "ay")
         else:
-            new_words.append(word+"ay")
+            new_words.append(word + "ay")
     return " ".join(new_words)
+
 
 if __name__ == "__main__":
     print(pigLatinConverter("Welcome to the Python world Are you ready"))
