@@ -30,7 +30,7 @@ class DemoWindow:
         result = text_buffer.get_text(text_buffer.get_start_iter(), text_buffer.get_end_iter())
         self.lbResult.set_text(str(self.doGo(result)))
 
-    def doGo(self,result):
-        return ""
+    def doGo(self, result):
+        return "not implement"
 
 
