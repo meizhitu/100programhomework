@@ -7,7 +7,6 @@ import urllib
 import posixpath
 
 import webapi as web
-import net
 import utils
 
 

@@ -96,8 +96,8 @@ class JSFeed(Feed):
         web.debug("publishing")
         Feed.publish(self,
                      '<script type="text/javascript">window.parent.%s(%s)</script>' % (
-                     self.callback, simplejson.dumps(obj) +
-                                    " " * 2048))
+                         self.callback, simplejson.dumps(obj) +
+                                        " " * 2048))
 
 
 if __name__ == "__main__":

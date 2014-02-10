@@ -11,12 +11,10 @@ import types
 from exceptions import SystemExit
 
 import webapi as web
-import webapi
 import wsgi
 import utils
-import debugerror
 import httpserver
-from utils import lstrips, safeunicode
+from utils import lstrips
 
 
 try:

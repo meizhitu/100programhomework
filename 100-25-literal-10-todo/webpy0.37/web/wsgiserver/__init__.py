@@ -103,7 +103,6 @@ def format_exc(limit=None):
 
 
 from urllib import unquote
-from urlparse import urlparse
 import warnings
 
 import errno
@@ -1361,7 +1360,7 @@ class WorkerThread(threading.Thread):
             'Requests': lambda s: self.requests_seen + ((self.start_time is None) and 0 or self.conn.requests_seen),
             'Bytes Read': lambda s: self.bytes_read + ((self.start_time is None) and 0 or self.conn.rfile.bytes_read),
             'Bytes Written': lambda s: self.bytes_written + (
-            (self.start_time is None) and 0 or self.conn.wfile.bytes_written),
+                (self.start_time is None) and 0 or self.conn.wfile.bytes_written),
             'Work Time': lambda s: self.work_time + ((self.start_time is None) and 0 or time.time() - self.start_time),
             'Read Throughput': lambda s: s['Bytes Read'](s) / (s['Work Time'](s) or 1e-6),
             'Write Throughput': lambda s: s['Bytes Written'](s) / (s['Work Time'](s) or 1e-6),

@@ -55,7 +55,7 @@ class Form(object):
                 out += '    <tr style="display: none;"><th></th><td>%s</td></tr>\n' % (html)
             else:
                 out += '    <tr><th><label for="%s">%s</label></th><td>%s</td></tr>\n' % (
-                i.id, net.websafe(i.description), html)
+                    i.id, net.websafe(i.description), html)
         out += "</table>"
         return out
 

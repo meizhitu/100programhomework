@@ -1203,7 +1203,6 @@ class Profile:
 
 profile = Profile
 
-import traceback
 # hack for compatibility with Python 2.3:
 if not hasattr(traceback, 'format_exc'):
     from cStringIO import StringIO

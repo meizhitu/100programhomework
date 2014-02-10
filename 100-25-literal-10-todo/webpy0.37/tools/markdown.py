@@ -2,7 +2,6 @@
 import re
 import md5
 import sys
-import string
 
 """markdown.py: A Markdown-styled-text to HTML converter in Python.
 

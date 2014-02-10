@@ -1,7 +1,6 @@
-create table ENTRIES(
-    ID int auto_increment,
-    TITLE text,
-    CONTENT text,
-    POSTED_ON datetime,
-    primary key(ID)
+create table entries(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title text,
+    content text,
+    posted_on datetime
 );

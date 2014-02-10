@@ -1,7 +1,11 @@
 #coding=utf-8
-import web
-import model
 import sys
+
+import web
+
+import model
+
+
 if sys.getdefaultencoding() != 'utf-8':
     reload(sys)
     sys.setdefaultencoding('utf-8')
@@ -16,7 +20,7 @@ urls = (
 
 ###template
 t_globals = {
-    'datestr': web.datestr
+    'datestr': model.transform_datestr
 }
 render = web.template.render('templates', base='base', globals=t_globals)
 
@@ -41,7 +45,7 @@ class New:
         web.form.Textarea('content', web.form.notnull,
                           rows=30, cols=80,
                           description=u'日志内容'),
-        web.form.Button('提交')
+        web.form.Button(u'提交')
     )
 
     def GET(self):
