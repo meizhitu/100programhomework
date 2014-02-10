@@ -11,6 +11,21 @@ __author__ = [
 __license__ = "public domain"
 __contributors__ = "see http://webpy.org/changes"
 
+import utils, db, net, wsgi, http, webapi, httpserver, debugerror
+import template, form
+
+import session
+
+from utils import *
+from db import *
+from net import *
+from wsgi import *
+from http import *
+from webapi import *
+from httpserver import *
+from debugerror import *
+from application import *
+from browser import *
 try:
     import webopenid as openid
 except ImportError:

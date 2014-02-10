@@ -3,24 +3,18 @@ Session Management
 (from web.py)
 """
 
-import os
-import time
-import datetime
-import base64
+import os, time, datetime, random, base64
+import os.path
 from copy import deepcopy
-
-
 try:
     import cPickle as pickle
 except ImportError:
     import pickle
 try:
     import hashlib
-
     sha1 = hashlib.sha1
 except ImportError:
     import sha
-
     sha1 = sha.new
 
 import utils
@@ -34,7 +28,7 @@ __all__ = [
 web.config.session_parameters = utils.storage({
     'cookie_name': 'webpy_session_id',
     'cookie_domain': None,
-    'cookie_path': None,
+    'cookie_path' : None,
     'timeout': 86400, #24 * 60 * 60, # 24 hours in seconds
     'ignore_expiry': True,
     'ignore_change_ip': True,
@@ -44,17 +38,15 @@ web.config.session_parameters = utils.storage({
     'secure': False
 })
 
-
-class SessionExpired(web.HTTPError):
+class SessionExpired(web.HTTPError): 
     def __init__(self, message):
         web.HTTPError.__init__(self, '200 OK', {}, data=message)
-
 
 class Session(object):
     """Session management for web.py
     """
     __slots__ = [
-        "store", "_initializer", "_last_cleanup_time", "_config", "_data",
+        "store", "_initializer", "_last_cleanup_time", "_config", "_data", 
         "__getitem__", "__setitem__", "__delitem__"
     ]
 
@@ -64,7 +56,7 @@ class Session(object):
         self._last_cleanup_time = 0
         self._config = utils.storage(web.config.session_parameters)
         self._data = utils.threadeddict()
-
+        
         self.__getitem__ = self._data.__getitem__
         self.__setitem__ = self._data.__setitem__
         self.__delitem__ = self._data.__delitem__
@@ -77,13 +69,13 @@ class Session(object):
 
     def __getattr__(self, name):
         return getattr(self._data, name)
-
+    
     def __setattr__(self, name, value):
         if name in self.__slots__:
             object.__setattr__(self, name, value)
         else:
             setattr(self._data, name, value)
-
+        
     def __delattr__(self, name):
         delattr(self._data, name)
 
@@ -114,7 +106,7 @@ class Session(object):
             d = self.store[self.session_id]
             self.update(d)
             self._validate_ip()
-
+        
         if not self.session_id:
             self.session_id = self._generate_session_id()
 
@@ -123,7 +115,7 @@ class Session(object):
                     self.update(deepcopy(self._initializer))
                 elif hasattr(self._initializer, '__call__'):
                     self._initializer()
-
+ 
         self.ip = web.ctx.ip
 
     def _check_expiry(self):
@@ -138,24 +130,23 @@ class Session(object):
         # check for change of IP
         if self.session_id and self.get('ip', None) != web.ctx.ip:
             if not self._config.ignore_change_ip:
-                return self.expired()
-
+               return self.expired() 
+    
     def _save(self):
         if not self.get('_killed'):
             self._setcookie(self.session_id)
             self.store[self.session_id] = dict(self._data)
         else:
             self._setcookie(self.session_id, expires=-1)
-
+            
     def _setcookie(self, session_id, expires='', **kw):
         cookie_name = self._config.cookie_name
         cookie_domain = self._config.cookie_domain
         cookie_path = self._config.cookie_path
         httponly = self._config.httponly
         secure = self._config.secure
-        web.setcookie(cookie_name, session_id, expires=expires, domain=cookie_domain, httponly=httponly, secure=secure,
-                      path=cookie_path)
-
+        web.setcookie(cookie_name, session_id, expires=expires, domain=cookie_domain, httponly=httponly, secure=secure, path=cookie_path)
+    
     def _generate_session_id(self):
         """Generate a random id for session"""
 
@@ -163,7 +154,7 @@ class Session(object):
             rand = os.urandom(16)
             now = time.time()
             secret_key = self._config.secret_key
-            session_id = sha1("%s%s%s%s" % (rand, now, utils.safestr(web.ctx.ip), secret_key))
+            session_id = sha1("%s%s%s%s" %(rand, now, utils.safestr(web.ctx.ip), secret_key))
             session_id = session_id.hexdigest()
             if session_id not in self.store:
                 break
@@ -172,7 +163,7 @@ class Session(object):
     def _valid_session_id(self, session_id):
         rx = utils.re_compile('^[0-9a-fA-F]+$')
         return rx.match(session_id)
-
+        
     def _cleanup(self):
         """Cleanup the stored sessions"""
         current_time = time.time()
@@ -186,12 +177,11 @@ class Session(object):
         self._killed = True
         self._save()
         raise SessionExpired(self._config.expired_message)
-
+ 
     def kill(self):
         """Kill the session, make it no longer available"""
         del self.store[self.session_id]
         self._killed = True
-
 
 class Store:
     """Base class for session stores"""
@@ -219,7 +209,6 @@ class Store:
         pickled = base64.decodestring(session_data)
         return pickle.loads(pickled)
 
-
 class DiskStore(Store):
     """
     Store for saving a session on disk.
@@ -237,27 +226,26 @@ class DiskStore(Store):
             ...
         KeyError: 'a'
     """
-
     def __init__(self, root):
         # if the storage root doesn't exists, create it.
         if not os.path.exists(root):
             os.makedirs(
-                os.path.abspath(root)
-            )
+                    os.path.abspath(root)
+                    )
         self.root = root
 
     def _get_path(self, key):
-        if os.path.sep in key:
+        if os.path.sep in key: 
             raise ValueError, "Bad key: %s" % repr(key)
         return os.path.join(self.root, key)
-
+    
     def __contains__(self, key):
         path = self._get_path(key)
         return os.path.exists(path)
 
     def __getitem__(self, key):
         path = self._get_path(key)
-        if os.path.exists(path):
+        if os.path.exists(path): 
             pickled = open(path).read()
             return self.decode(pickled)
         else:
@@ -265,12 +253,12 @@ class DiskStore(Store):
 
     def __setitem__(self, key, value):
         path = self._get_path(key)
-        pickled = self.encode(value)
+        pickled = self.encode(value)    
         try:
             f = open(path, 'w')
             try:
                 f.write(pickled)
-            finally:
+            finally: 
                 f.close()
         except IOError:
             pass
@@ -279,15 +267,14 @@ class DiskStore(Store):
         path = self._get_path(key)
         if os.path.exists(path):
             os.remove(path)
-
+    
     def cleanup(self, timeout):
         now = time.time()
         for f in os.listdir(self.root):
             path = self._get_path(f)
             atime = os.stat(path).st_atime
-            if now - atime > timeout:
+            if now - atime > timeout :
                 os.remove(path)
-
 
 class DBStore(Store):
     """Store for saving a session in database
@@ -297,14 +284,13 @@ class DBStore(Store):
         atime DATETIME NOT NULL default current_timestamp,
         data TEXT
     """
-
     def __init__(self, db, table_name):
         self.db = db
         self.table = table_name
-
+    
     def __contains__(self, key):
         data = self.db.select(self.table, where="session_id=$key", vars=locals())
-        return bool(list(data))
+        return bool(list(data)) 
 
     def __getitem__(self, key):
         now = datetime.datetime.now()
@@ -322,16 +308,15 @@ class DBStore(Store):
         if key in self:
             self.db.update(self.table, where="session_id=$key", data=pickled, vars=locals())
         else:
-            self.db.insert(self.table, False, session_id=key, data=pickled)
-
+            self.db.insert(self.table, False, session_id=key, data=pickled )
+                
     def __delitem__(self, key):
         self.db.delete(self.table, where="session_id=$key", vars=locals())
 
     def cleanup(self, timeout):
-        timeout = datetime.timedelta(timeout / (24.0 * 60 * 60)) #timedelta takes numdays as arg
+        timeout = datetime.timedelta(timeout/(24.0*60*60)) #timedelta takes numdays as arg
         last_allowed_time = datetime.datetime.now() - timeout
         self.db.delete(self.table, where="$last_allowed_time > atime", vars=locals())
-
 
 class ShelfStore:
     """Store for saving session using `shelve` module.
@@ -341,7 +326,6 @@ class ShelfStore:
 
     XXX: is shelve thread-safe?
     """
-
     def __init__(self, shelf):
         self.shelf = shelf
 
@@ -355,7 +339,7 @@ class ShelfStore:
 
     def __setitem__(self, key, value):
         self.shelf[key] = time.time(), value
-
+        
     def __delitem__(self, key):
         try:
             del self.shelf[key]
@@ -366,11 +350,9 @@ class ShelfStore:
         now = time.time()
         for k in self.shelf.keys():
             atime, v = self.shelf[k]
-            if now - atime > timeout:
+            if now - atime > timeout :
                 del self[k]
 
-
-if __name__ == '__main__':
+if __name__ == '__main__' :
     import doctest
-
     doctest.testmod()

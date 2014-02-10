@@ -2,10 +2,8 @@
 
 Import this module at the beginning of your program.
 """
-import sys
-
 import web
-
+import sys
 
 def setup_database():
     if web.config.get('db_parameters'):
@@ -33,19 +31,15 @@ def setup_database():
         web.transact = transact
         web.rollback = rollback
         web.commit = commit
-
-
+        
 web.loadhooks = web.webapi.loadhooks = {}
 web._loadhooks = web.webapi._loadhooks = {}
 web.unloadhooks = web.webapi.unloadhooks = {}
 
-
 def load():
     setup_database()
 
-
 web.load = load
-
 
 def run(urls, fvars, *middleware):
     setup_database()
@@ -65,25 +59,16 @@ def run(urls, fvars, *middleware):
     app.add_processor(hook_processor)
     app.run(*middleware)
 
-
 class _outputter:
     """Wraps `sys.stdout` so that print statements go into the response."""
-
-    def __init__(self, file):
-        self.file = file
-
+    def __init__(self, file): self.file = file
     def write(self, string_):
         if hasattr(web.ctx, 'output'):
             return output(string_)
         else:
             self.file.write(string_)
-
-    def __getattr__(self, attr):
-        return getattr(self.file, attr)
-
-    def __getitem__(self, item):
-        return self.file[item]
-
+    def __getattr__(self, attr): return getattr(self.file, attr)
+    def __getitem__(self, item): return self.file[item]
 
 def output(string_):
     """Appends `string_` to the response."""
@@ -93,7 +78,6 @@ def output(string_):
     else:
         web.ctx.output += str(string_)
 
-
 def _capturedstdout():
     sysstd = sys.stdout
     while hasattr(sysstd, 'file'):
@@ -102,17 +86,14 @@ def _capturedstdout():
     if isinstance(sys.stdout, _outputter): return True
     return False
 
-
 if not _capturedstdout():
     sys.stdout = _outputter(sys.stdout)
 
 web.run = run
 
-
 class Stowage(web.storage):
     def __str__(self):
         return self._str
-
 
 web.template.Stowage = web.template.stowage = Stowage
 

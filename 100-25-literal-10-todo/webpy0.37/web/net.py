@@ -4,20 +4,15 @@ Network Utilities
 """
 
 __all__ = [
-    "validipaddr", "validipport", "validip", "validaddr",
-    "urlquote",
-    "httpdate", "parsehttpdate",
-    "htmlquote", "htmlunquote", "websafe",
+  "validipaddr", "validipport", "validip", "validaddr", 
+  "urlquote",
+  "httpdate", "parsehttpdate", 
+  "htmlquote", "htmlunquote", "websafe",
 ]
 
-import urllib
-import time
-
-try:
-    import datetime
-except ImportError:
-    pass
-
+import urllib, time
+try: import datetime
+except ImportError: pass
 
 def validipaddr(address):
     """
@@ -41,7 +36,6 @@ def validipaddr(address):
         return False
     return True
 
-
 def validipport(port):
     """
     Returns True if `port` is a valid IPv4 port.
@@ -60,12 +54,11 @@ def validipport(port):
         return False
     return True
 
-
 def validip(ip, defaultaddr="0.0.0.0", defaultport=8080):
     """Returns `(ip_address, port)` from string `ip_addr_port`"""
     addr = defaultaddr
     port = defaultport
-
+    
     ip = ip.split(":", 1)
     if len(ip) == 1:
         if not ip[0]:
@@ -84,7 +77,6 @@ def validip(ip, defaultaddr="0.0.0.0", defaultport=8080):
     else:
         raise ValueError, ':'.join(ip) + ' is not a valid IP address/port'
     return (addr, port)
-
 
 def validaddr(string_):
     """
@@ -108,7 +100,6 @@ def validaddr(string_):
     else:
         return validip(string_)
 
-
 def urlquote(val):
     """
     Quotes a string for use in a URL.
@@ -121,12 +112,9 @@ def urlquote(val):
         '%E2%80%BD'
     """
     if val is None: return ''
-    if not isinstance(val, unicode):
-        val = str(val)
-    else:
-        val = val.encode('utf-8')
+    if not isinstance(val, unicode): val = str(val)
+    else: val = val.encode('utf-8')
     return urllib.quote(val)
-
 
 def httpdate(date_obj):
     """
@@ -137,7 +125,6 @@ def httpdate(date_obj):
         'Thu, 01 Jan 1970 01:01:01 GMT'
     """
     return date_obj.strftime("%a, %d %b %Y %H:%M:%S GMT")
-
 
 def parsehttpdate(string_):
     """
@@ -151,7 +138,6 @@ def parsehttpdate(string_):
     except ValueError:
         return None
     return datetime.datetime(*t[:6])
-
 
 def htmlquote(text):
     r"""
@@ -167,7 +153,6 @@ def htmlquote(text):
     text = text.replace(u'"', u"&quot;")
     return text
 
-
 def htmlunquote(text):
     r"""
     Decodes `text` that's HTML quoted.
@@ -181,8 +166,7 @@ def htmlunquote(text):
     text = text.replace(u"&lt;", u"<")
     text = text.replace(u"&amp;", u"&") # Must be done last!
     return text
-
-
+    
 def websafe(val):
     r"""Converts `val` so that it is safe for use in Unicode HTML.
 
@@ -201,11 +185,9 @@ def websafe(val):
         val = val.decode('utf-8')
     elif not isinstance(val, unicode):
         val = unicode(val)
-
+        
     return htmlquote(val)
-
 
 if __name__ == "__main__":
     import doctest
-
     doctest.testmod()

@@ -2,20 +2,20 @@
 Web application
 (from web.py)
 """
+import webapi as web
+import webapi, wsgi, utils
+import debugerror
+import httpserver
+
+from utils import lstrips, safeunicode
 import sys
+
 import urllib
 import traceback
 import itertools
 import os
 import types
 from exceptions import SystemExit
-
-import webapi as web
-import wsgi
-import utils
-import httpserver
-from utils import lstrips
-
 
 try:
     import wsgiref.handlers
@@ -24,11 +24,10 @@ except ImportError:
 
 __all__ = [
     "application", "auto_application",
-    "subdir_application", "subdomain_application",
+    "subdir_application", "subdomain_application", 
     "loadhook", "unloadhook",
     "autodelegate"
 ]
-
 
 class application:
     """
@@ -42,17 +41,16 @@ class application:
         >>> app.request("/hello").data
         'hello'
     """
-
     def __init__(self, mapping=(), fvars={}, autoreload=None):
         if autoreload is None:
             autoreload = web.config.get('debug', False)
         self.init_mapping(mapping)
         self.fvars = fvars
         self.processors = []
-
+        
         self.add_processor(loadhook(self._load))
         self.add_processor(unloadhook(self._unload))
-
+        
         if autoreload:
             def main_module_name():
                 mod = sys.modules['__main__']
@@ -70,10 +68,10 @@ class application:
                     # to be imported using its file name.                    
                     name = main_module_name()
                 return name
-
+                
             mapping_name = utils.dictfind(fvars, mapping)
             module_name = modname(fvars)
-
+            
             def reload_mapping():
                 """loadhook to reload mapping and fvars."""
                 mod = __import__(module_name, None, None, [''])
@@ -92,13 +90,13 @@ class application:
                     __import__(main_module_name())
                 except ImportError:
                     pass
-
+                    
     def _load(self):
         web.ctx.app_stack.append(self)
-
+        
     def _unload(self):
         web.ctx.app_stack = web.ctx.app_stack[:-1]
-
+        
         if web.ctx.app_stack:
             # this is a sub-application, revert ctx to earlier state.
             oldctx = web.ctx.get('_oldctx')
@@ -107,7 +105,7 @@ class application:
                 web.ctx.homepath = oldctx.homepath
                 web.ctx.path = oldctx.path
                 web.ctx.fullpath = oldctx.fullpath
-
+                
     def _cleanup(self):
         # Threads can be recycled by WSGI servers.
         # Clearing up all thread-local state to avoid interefereing with subsequent requests.
@@ -188,7 +186,7 @@ class application:
         """
         path, maybe_query = urllib.splitquery(localpart)
         query = maybe_query or ""
-
+        
         if 'env' in kw:
             env = kw['env']
         else:
@@ -208,7 +206,6 @@ class application:
         if method not in ["HEAD", "GET"]:
             data = data or ''
             import StringIO
-
             if isinstance(data, dict):
                 q = urllib.urlencode(data)
             else:
@@ -217,24 +214,21 @@ class application:
             if not env.get('CONTENT_TYPE', '').lower().startswith('multipart/') and 'CONTENT_LENGTH' not in env:
                 env['CONTENT_LENGTH'] = len(q)
         response = web.storage()
-
         def start_response(status, headers):
             response.status = status
             response.headers = dict(headers)
             response.header_items = headers
-
         response.data = "".join(self.wsgifunc()(env, start_response))
         return response
 
     def browser(self):
         import browser
-
         return browser.AppBrowser(self)
 
     def handle(self):
         fn, args = self._match(self.mapping, web.ctx.path)
         return self._delegate(fn, self.fvars, args)
-
+        
     def handle_with_processors(self):
         def process(processors):
             try:
@@ -250,13 +244,12 @@ class application:
             except:
                 print >> web.debug, traceback.format_exc()
                 raise self.internalerror()
-
+        
         # processors must be applied in the resvere order. (??)
         return process(self.processors)
-
+                        
     def wsgifunc(self, *middleware):
         """Returns a WSGI-compatible function for this application."""
-
         def peep(iterator):
             """Peeps into an iterator by doing an iteration
             and returns an equivalent iterator.
@@ -269,11 +262,10 @@ class application:
             except StopIteration:
                 firstchunk = ''
 
-            return itertools.chain([firstchunk], iterator)
-
-        def is_generator(x):
-            return x and hasattr(x, 'next')
-
+            return itertools.chain([firstchunk], iterator)    
+                                
+        def is_generator(x): return x and hasattr(x, 'next')
+        
         def wsgi(env, start_resp):
             # clear threadlocal to avoid inteference of previous requests
             self._cleanup()
@@ -296,14 +288,14 @@ class application:
 
             status, headers = web.ctx.status, web.ctx.headers
             start_resp(status, headers)
-
+            
             def cleanup():
                 self._cleanup()
                 yield '' # force this function to be a generator
-
+                            
             return itertools.chain(result, cleanup())
 
-        for m in middleware:
+        for m in middleware: 
             wsgi = m(wsgi)
 
         return wsgi
@@ -326,7 +318,7 @@ class application:
         if httpserver.server:
             httpserver.server.stop()
             httpserver.server = None
-
+    
     def cgirun(self, *middleware):
         """
         Return a CGI handler. This is mostly useful with Google App Engine.
@@ -338,12 +330,11 @@ class application:
 
         try:
             from google.appengine.ext.webapp.util import run_wsgi_app
-
             return run_wsgi_app(wsgiapp)
         except ImportError:
             # we're not running from within Google App Engine
             return wsgiref.handlers.CGIHandler().run(wsgiapp)
-
+    
     def load(self, env):
         """Initializes ctx using env."""
         ctx = web.ctx
@@ -382,16 +373,16 @@ class application:
             ctx.query = ''
 
         ctx.fullpath = ctx.path + ctx.query
-
+        
         for k, v in ctx.iteritems():
             # convert all string values to unicode values and replace 
             # malformed data with a suitable replacement marker.
             if isinstance(v, str):
-                ctx[k] = v.decode('utf-8', 'replace')
+                ctx[k] = v.decode('utf-8', 'replace') 
 
-                # status must always be str
+        # status must always be str
         ctx.status = '200 OK'
-
+        
         ctx.app_stack = []
 
     def _delegate(self, f, fvars, args=[]):
@@ -403,10 +394,9 @@ class application:
                 raise web.nomethod(cls)
             tocall = getattr(cls(), meth)
             return tocall(*args)
-
-        def is_class(o):
-            return isinstance(o, (types.ClassType, type))
-
+            
+        def is_class(o): return isinstance(o, (types.ClassType, type))
+            
         if f is None:
             raise web.notfound()
         elif isinstance(f, application):
@@ -445,11 +435,11 @@ class application:
                 what, result = utils.re_subm('^' + pat + '$', what, value)
             else:
                 result = utils.re_compile('^' + pat + '$').match(value)
-
+                
             if result: # it's a match
                 return what, [x for x in result.groups()]
         return None, None
-
+        
     def _delegate_sub_application(self, dir, app):
         """Deletes request to sub application `app` rooted at the directory `dir`.
         The home, homepath, path and fullpath values in web.ctx are updated to mimic request
@@ -463,13 +453,13 @@ class application:
         web.ctx.path = web.ctx.path[len(dir):]
         web.ctx.fullpath = web.ctx.fullpath[len(dir):]
         return app.handle_with_processors()
-
+            
     def get_parent_app(self):
         if self in web.ctx.app_stack:
             index = web.ctx.app_stack.index(self)
             if index > 0:
-                return web.ctx.app_stack[index - 1]
-
+                return web.ctx.app_stack[index-1]
+        
     def notfound(self):
         """Returns HTTPError with '404 not found' message"""
         parent = self.get_parent_app()
@@ -477,7 +467,7 @@ class application:
             return parent.notfound()
         else:
             return web._NotFound()
-
+            
     def internalerror(self):
         """Returns HTTPError with '500 internal error' message"""
         parent = self.get_parent_app()
@@ -485,11 +475,9 @@ class application:
             return parent.internalerror()
         elif web.config.get('debug'):
             import debugerror
-
             return debugerror.debugerror()
         else:
             return web._InternalError()
-
 
 class auto_application(application):
     """Application similar to `application` but urls are constructed 
@@ -507,7 +495,6 @@ class auto_application(application):
         >>> app.request('/foo/bar').data
         'foo'
     """
-
     def __init__(self):
         application.__init__(self)
 
@@ -529,8 +516,7 @@ class auto_application(application):
 
 # The application class already has the required functionality of subdir_application
 subdir_application = application
-
-
+                
 class subdomain_application(application):
     """
     Application to delegate requests based on the host.
@@ -550,12 +536,11 @@ class subdomain_application(application):
         >>> response.data
         'not found'
     """
-
     def handle(self):
         host = web.ctx.host.split(':')[0] #strip port
         fn, args = self._match(self.mapping, host)
         return self._delegate(fn, self.fvars, args)
-
+        
     def _match(self, mapping, value):
         for pat, what in mapping:
             if isinstance(what, basestring):
@@ -566,8 +551,7 @@ class subdomain_application(application):
             if result: # it's a match
                 return what, [x for x in result.groups()]
         return None, None
-
-
+        
 def loadhook(h):
     """
     Converts a load hook into an application processor.
@@ -577,14 +561,12 @@ def loadhook(h):
         ...
         >>> app.add_processor(loadhook(f))
     """
-
     def processor(handler):
         h()
         return handler()
-
+        
     return processor
-
-
+    
 def unloadhook(h):
     """
     Converts an unload hook into an application processor.
@@ -594,7 +576,6 @@ def unloadhook(h):
         ...
         >>> app.add_processor(unloadhook(f))    
     """
-
     def processor(handler):
         try:
             result = handler()
@@ -609,7 +590,7 @@ def unloadhook(h):
         else:
             h()
             return result
-
+            
     def wrap(result):
         def next():
             try:
@@ -622,9 +603,8 @@ def unloadhook(h):
         result = iter(result)
         while True:
             yield next()
-
+            
     return processor
-
 
 def autodelegate(prefix=''):
     """
@@ -644,7 +624,6 @@ def autodelegate(prefix=''):
     If a user visits `/prefs/password/change` then `GET_password(self, '/change')`
     is called.
     """
-
     def internal(self, arg):
         if '/' in arg:
             first, rest = arg.split('/', 1)
@@ -653,7 +632,7 @@ def autodelegate(prefix=''):
         else:
             func = prefix + arg
             args = []
-
+        
         if hasattr(self, func):
             try:
                 return getattr(self, func)(*args)
@@ -661,9 +640,7 @@ def autodelegate(prefix=''):
                 raise web.notfound()
         else:
             raise web.notfound()
-
     return internal
-
 
 class Reloader:
     """Checks to see if any loaded modules have changed on disk and, 
@@ -675,7 +652,7 @@ class Reloader:
         SUFFIX = '$py.class'
     else:
         SUFFIX = '.pyc'
-
+    
     def __init__(self):
         self.mtimes = {}
 
@@ -689,24 +666,22 @@ class Reloader:
         if not (mod and hasattr(mod, '__file__') and mod.__file__):
             return
 
-        try:
+        try: 
             mtime = os.stat(mod.__file__).st_mtime
         except (OSError, IOError):
             return
         if mod.__file__.endswith(self.__class__.SUFFIX) and os.path.exists(mod.__file__[:-1]):
             mtime = max(os.stat(mod.__file__[:-1]).st_mtime, mtime)
-
+            
         if mod not in self.mtimes:
             self.mtimes[mod] = mtime
         elif self.mtimes[mod] < mtime:
-            try:
+            try: 
                 reload(mod)
                 self.mtimes[mod] = mtime
-            except ImportError:
+            except ImportError: 
                 pass
-
-
+                
 if __name__ == "__main__":
     import doctest
-
     doctest.testmod()

@@ -1,7 +1,5 @@
-import web
-
 import webtest
-
+import web
 
 urls = (
     "/", "index",
@@ -12,22 +10,18 @@ urls = (
 )
 app = web.application(urls, globals())
 
-
 class index:
     def GET(self):
         return "welcome"
-
 
 class hello:
     def GET(self, name):
         name = name or 'world'
         return "hello, " + name + '!'
 
-
 class cookie:
     def GET(self):
         return ",".join(sorted(web.cookies().keys()))
-
 
 class setcookie:
     def GET(self):
@@ -36,12 +30,10 @@ class setcookie:
             web.setcookie(k, v)
         return "done"
 
-
 class redirect:
     def GET(self):
         i = web.input(url='/')
         raise web.seeother(i.url)
-
 
 class BrowserTest(webtest.TestCase):
     def testCookies(self):
@@ -67,7 +59,6 @@ class BrowserTest(webtest.TestCase):
         self.assertEquals(b.url, 'https://0.0.0.0:8080/')
         b.open('https://0.0.0.0:8080/redirect?url=/hello/foo')
         self.assertEquals(b.url, 'https://0.0.0.0:8080/hello/foo')
-
 
 if __name__ == "__main__":
     webtest.main()

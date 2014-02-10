@@ -29,7 +29,6 @@ import openid.store.memstore
 sessions = {}
 store = openid.store.memstore.MemoryStore()
 
-
 def _secret():
     try:
         secret = file('.openid_secret_key').read()
@@ -39,10 +38,8 @@ def _secret():
         file('.openid_secret_key', 'w').write(secret)
     return secret
 
-
 def _hmac(identity_url):
     return hmac.new(_secret(), identity_url).hexdigest()
-
 
 def _random_session():
     n = random.random()
@@ -51,7 +48,6 @@ def _random_session():
     n = str(n)
     return n
 
-
 def status():
     oid_hash = web.cookies().get('openid_identity_hash', '').split(',', 1)
     if len(oid_hash) > 1:
@@ -59,7 +55,6 @@ def status():
         if oid_hash == _hmac(identity_url):
             return identity_url
     return None
-
 
 def form(openid_loc):
     oid = status()
@@ -81,10 +76,8 @@ def form(openid_loc):
           <button type="submit">log in</button>
         </form>''' % (openid_loc, web.ctx.fullpath)
 
-
 def logout():
     web.setcookie('openid_identity_hash', '', expires=-1)
-
 
 class host:
     def POST(self):
@@ -99,7 +92,7 @@ class host:
 
         n = _random_session()
         sessions[n] = {'webpy_return_to': i.return_to}
-
+        
         c = openid.consumer.consumer.Consumer(sessions[n], store)
         a = c.begin(i.openid)
         f = a.redirectURL(web.ctx.home, web.ctx.home + web.ctx.fullpath)

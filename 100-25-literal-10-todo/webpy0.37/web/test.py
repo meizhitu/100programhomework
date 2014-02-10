@@ -2,15 +2,14 @@
 (part of web.py)
 """
 import unittest
-import sys
+import sys, os
+import web
 
 TestCase = unittest.TestCase
 TestSuite = unittest.TestSuite
 
-
 def load_modules(names):
     return [__import__(name, None, None, "x") for name in names]
-
 
 def module_suite(module, classnames=None):
     """Makes a suite from a module."""
@@ -21,17 +20,14 @@ def module_suite(module, classnames=None):
     else:
         return unittest.TestLoader().loadTestsFromModule(module)
 
-
 def doctest_suite(module_names):
     """Makes a test suite from doctests."""
     import doctest
-
     suite = TestSuite()
     for mod in load_modules(module_names):
         suite.addTest(doctest.DocTestSuite(mod))
     return suite
-
-
+    
 def suite(module_names):
     """Creates a suite from multiple modules."""
     suite = TestSuite()
@@ -39,11 +35,9 @@ def suite(module_names):
         suite.addTest(module_suite(mod))
     return suite
 
-
 def runTests(suite):
     runner = unittest.TextTestRunner()
     return runner.run(suite)
-
 
 def main(suite=None):
     if not suite:
