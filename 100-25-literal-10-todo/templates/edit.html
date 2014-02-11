@@ -2,6 +2,10 @@ $def with(post,form)
 <h1>编辑 $form.d.title</h1>
 <form action="" method="post">
     $:form.render()
+    <script type="text/javascript">
+        UE.getEditor('content');
+
+    </script>
 </form>
 <h2>删除</h2>
 <form action="/delete/$post.id" method="post">

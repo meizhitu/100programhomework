@@ -1,10 +1,10 @@
 #coding=utf-8
 import sys
+import os
 
 import web
-
 import model
-
+import config
 
 if sys.getdefaultencoding() != 'utf-8':
     reload(sys)
@@ -15,14 +15,11 @@ urls = (
     '/view/(\d+)', 'View',
     '/new', 'New',
     '/delete/(\d+)', 'Delete',
-    '/edit/(\d+)', 'Edit'
+    '/edit/(\d+)', 'Edit',
+    '/imgs/(.*)', 'Imgs'
 )
 
-###template
-t_globals = {
-    'datestr': model.transform_datestr
-}
-render = web.template.render('templates', base='base', globals=t_globals)
+render = config.render
 
 
 class Index:
@@ -81,7 +78,23 @@ class Edit:
         model.update_post(int(id), form.d.title, form.d.content)
         raise web.seeother('/')
 
-    app = web.application(urls, globals())
 
-    if __name__ == '__main__':
-        app.run()
+class Imgs:
+    def GET(self, name):
+        ext = name.split(".")[-1]
+        cType = {
+            "png": "images/png",
+            "jpg": "images/jpeg",
+            "gif": "images/gif",
+            "ico": "images/x-icon"
+        }
+        if name in os.listdir('imgs'):
+            web.header("Content-Type", cType[ext])
+            return open('imgs/%s' % name, "rb").read()
+        else:
+            raise web.notfound()
+
+
+app = web.application(urls, globals())
+if __name__ == '__main__':
+    app.run()

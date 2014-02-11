@@ -2,19 +2,59 @@ $def with(page)
 <!DOCTYPE html>
 <html>
 <head>
-    <title>博客</title>
-    <style>
-        #menu {
-        width: 200px;
-        float: right;
+    <title>$config.site_name</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="http://libs.baidu.com/bootstrap/2.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://ajax.aspnetcdn.com/ajax/bootstrap/2.3.2/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <script type="text/javascript" src="/static/ueditor1_3_6/ueditor.config.js"></script>
+    <script type="text/javascript" src="/static/ueditor1_3_6/ueditor.all.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="/static/ueditor1_3_6/lang/zh-cn/zh-cn.js"></script>
+    <style type="text/css">
+        body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+        }
+        .sidebar-nav {
+        padding: 9px 0;
         }
     </style>
 </head>
 <body>
-<ul id="menu">
-    <li><a href="/">主页</a></li>
-    <li><a href="/new">新建日志</a></li>
-</ul>
-$:page
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+
+            <a class="brand" href="/"><img src="/imgs/favicon.ico" width=16 height=16/>主页
+            </a>
+
+            <div class="nav-collapse collapse">
+                <ul class="nav">
+                    <li id="02">
+                        <a href="/new">
+                            <i class="icon-magnet">
+                            </i>
+                            新建日志
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    $:page
+</div>
+<footer>
+    <p>&copy; 100homework 2014</p>
+</footer>
+<script src="http://libs.baidu.com/jquery/2.0.3/jquery.min.js"></script>
+<script src="http://libs.baidu.com/bootstrap/2.3.2/js/bootstrap.min.js"></script>
 </body>
 </html>
