@@ -5,6 +5,7 @@ import os
 import web
 import model
 import config
+from webpyueditor import Ue_ImageUp, Ue_FileUp, Ue_ScrawlUp, Ue_GetRemoteImage, Ue_GetMovie, Ue_ImageManager
 
 if sys.getdefaultencoding() != 'utf-8':
     reload(sys)
@@ -17,9 +18,12 @@ urls = (
     '/delete/(\d+)', 'Delete',
     '/edit/(\d+)', 'Edit',
     '/imgs/(.*)', 'Imgs',
-    '/ue_imageUp','Ue_ImageUp',
-    '/ue_fileUp','Ue_FileUp',
-
+    '/ue_imageUp', Ue_ImageUp,
+    '/ue_fileUp', Ue_FileUp,
+    '/ue_scrawlUp', Ue_ScrawlUp,
+    '/ue_getRemoteImage', Ue_GetRemoteImage,
+    '/ue_getMovie', Ue_GetMovie,
+    '/ue_imageManager', Ue_ImageManager,
 )
 
 render = config.render
@@ -96,42 +100,6 @@ class Imgs:
             return open('imgs/%s' % name, "rb").read()
         else:
             raise web.notfound()
-
-class Ue_ImageUp:
-    def GET(self):
-        reqData = web.input()
-        if 'fetch' in reqData:
-            web.header( 'Content-Type','text/javascript' )
-            return 'updateSavePath(["upload"]);'
-        web.header("Content-Type","text/html; charset=utf-8")
-        return ""
-    def POST(self):
-        postData = web.input(upfile={})
-        fileObj = postData.upfile
-        picTitle=postData.pictitle
-        fileName = postData.fileName
-        filedir = 'static/upload' # change this to the directory you want to store the file in.
-        fileName=fileName.replace('\\','/') # replaces the windows-style slashes with linux ones.
-        fout = open(filedir +'/'+ fileName,'wb') # creates the file where the uploaded file should be stored
-        fout.write(fileObj.file.read()) # writes the uploaded file to the newly created file.
-        fout.close() # closes the file, upload complete.
-        return "{'url':'/" + filedir +'/'+ fileName + "','title':'"+ picTitle+ "','original':'" + fileName + "','state':'" + "SUCCESS"+ "'}"
-
-class Ue_FileUp:
-    def GET(self):
-        web.header("Content-Type","text/html; charset=utf-8")
-        return ""
-    def POST(self):
-        postData = web.input()
-        fileObj = postData.upfile
-        picTitle=postData.pictitle
-        fileName = postData.fileName
-        filedir = 'static/upload' # change this to the directory you want to store the file in.
-        filepath=fileName.replace('\\','/') # replaces the windows-style slashes with linux ones.
-        fout = open(filedir +'/'+ fileName,'w') # creates the file where the uploaded file should be stored
-        fout.write(fileObj.read()) # writes the uploaded file to the newly created file.
-        fout.close() # closes the file, upload complete.
-        raise web.seeother('/ue_fileUp')
 
 
 app = web.application(urls, globals())
