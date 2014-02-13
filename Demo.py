@@ -1,9 +1,6 @@
 __author__ = 'rui'
 #coding=utf-8
 
-__author__ = 'rui'
-#coding=utf-8
-
 import pygtk
 
 pygtk.require("2.0")
