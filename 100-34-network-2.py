@@ -462,7 +462,7 @@ def nistTime():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     for i in range(0, 13):
         try:
-            hostName = timeserver[i][1]
+            hostName = timeserver[searchSeq[i]][1]
             address = (hostName, portNum)
             print(address)
             s.connect(address)
