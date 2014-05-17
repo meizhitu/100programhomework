@@ -93,16 +93,28 @@ class FtpClient():
             print(e)
             sys.exit(1)
 
-    def get_directory_listing(self):
+    def get_directory_listing(self,depth=0):
         """
-        Lists all the contents in the connected server or in the specified folder in the server.
+        return a recursive listing of an ftp server contents (starting
+        from the current directory)
 
+        listing is returned as a recursive dictionary, where each key
+        contains a contents of the subdirectory or None if it corresponds
+        to a file.
+
+        @param ftp: ftplib.FTP object
         """
-        data = []
-        ftp.dir(data.append)
-        for line in data:
-            print("-", line)
-        self.log_message("Listed all the files in {0}".format(ftp.pwd()))
+        if depth > 10:
+            return ['depth > 10']
+        level = {}
+        for entry in (path for path in ftp.nlst() if path not in ('.', '..')):
+            try:
+                ftp.cwd(entry)
+                level[entry] = get_directory_listing(ftp, depth + 1)
+                ftp.cwd('..')
+            except ftplib.error_perm:
+                level[entry] = None
+        return level
 
     def upload_file(self, filename):
         """
@@ -163,8 +175,8 @@ def config():
     # Upload command
     #ftp_obj.upload_file(fp_path)
     #print(ftp_obj.get_message())
-    ftp_obj.get_directory_listing()
-    print(ftp_obj.get_message())
+    print(ftp_obj.get_directory_listing())
+    #print(ftp_obj.get_message())
 
 
 if __name__ == '__main__':
