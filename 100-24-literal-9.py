@@ -2,7 +2,7 @@ __author__ = 'rui'
 #coding=utf-8
 import urllib
 import json
-
+import re
 from pylab import *
 
 mpl.rcParams['font.sans-serif'] = ['SimHei']  # 指定默认字体
@@ -86,4 +86,4 @@ def quote_track(stock_num):
 if __name__ == "__main__":
     #get_stock_hexun("002041.sz")
     quote_track("002041.sz")
-    print(re.sub(r"(,?)([^:{,\"]+?)\s?:", r"\1'\2':", '{"002041.sz":{na:"�Ǻ���ҵ",pc:"30.15",op:"30.15",vo:"41364",'))
+    print(re.sub(r"(,?)([^:{,\"]+?)\s?:", r"\1'\2':", '{"002041.sz":{na:"登海种业",pc:"30.15",op:"30.15",vo:"41364",'))

@@ -5,9 +5,12 @@ import pygtk
 
 pygtk.require("2.0")
 import gtk
-import urllib2
+import urllib2,urllib
 from BeautifulSoup import BeautifulSoup
-
+import re
+import math
+from datetime import datetime
+import json
 
 class NewsTickerWindow:
     def __init__(self, title=""):
@@ -33,7 +36,17 @@ class NewsTickerWindow:
         soup = BeautifulSoup(content)
         self.lbnews.set_label(soup.li.span.a.string)
         self.lbnews.set_uri(soup.li.span.a['href'])
-        print(soup.li.span.a)
+        t = datetime.today()
+        h = t.hour
+        m = t.minute
+        s = math.floor(t.second / 10) * 10
+        arg = "%02d%02d%02d" % (h, m, s)
+        params = urllib.urlencode({"stocklist": "000001_1|399001_2", "time": arg})
+        content = urllib2.urlopen("http://quote.tool.hexun.com/hqzx/getstock.aspx?%s" % params).read()
+        content= content.split(";")[0].replace("stocksArr = ","").replace("\r\n","")
+        print(content)
+        decodejson = json.loads(content)
+        print(decodejson)
         return True
 
 
