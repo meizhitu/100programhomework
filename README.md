@@ -52,7 +52,7 @@
  25. Guestbook / Journal – A simple application that allows people to add comments or write journal entries. It can allow comments or not and timestamps for all entries. Could also be made into a shout box.
  26. News Ticker and Game Scores – A program which sits on your desktop and aggregates news and game scores from various sources on the net. It then scrolls them across the screen on regular intervals.
  27. Fortune Teller (Horoscope) – A program that checks your horoscope on various astrology sites and puts them together for you each day.
- 28. Vigenere / Vernam / Ceasar Ciphers – Functions for encrypting and decrypting data messages. Then send them to a friend.
+ 28. Vigenere / Vernam / Caesar Ciphers – Functions for encrypting and decrypting data messages. Then send them to a friend.
  29. Random Gift Suggestions – Enter various gifts for certain people when you think of them. When its time to give them a gift (xmas, birthday, anniversary) it will randomly pick one and perhaps places you can get it.
  30. Text to HTML Generator – Converts text files into web HTML files and stylizes them. Great for making online documentation of standard text documentation.
  31. CD Key Generator – Generates a unique key for your applications to use based on some arbitrary algorithm that you can specify. Great for software developers looking to make shareware that can be activated.
